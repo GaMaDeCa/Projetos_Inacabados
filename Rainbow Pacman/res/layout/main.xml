@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center"
+	tools:context="alien8652.games.rainbowpacmantest.MainActivity"
+	android:orientation="vertical">
+
+	<alien8652.games.rainbowpacmantest.PacmanGameView
+		android:id="@+id/pacView"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent"
+		android:layout_weight="1.0"/>
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:orientation="horizontal"
+		android:gravity="center"
+		android:background="#2D2D2D">
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="vertical"
+			android:layout_weight="1.0">
+
+			<Button
+				android:layout_height="100dp"
+				android:layout_width="match_parent"
+				android:onClick="esq"
+				android:text="←"
+				android:textSize="30sp"/>
+
+			<Button
+				android:layout_height="100dp"
+				android:layout_width="match_parent"
+				android:onClick="dir"
+				android:text="→"
+				android:textSize="30sp"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="vertical"
+			android:layout_weight="1.0">
+
+			<Button
+				android:layout_height="100dp"
+				android:layout_width="match_parent"
+				android:onClick="cim"
+				android:text="↑"
+				android:textSize="30sp"/>
+
+			<Button
+				android:layout_height="100dp"
+				android:layout_width="match_parent"
+				android:onClick="dow"
+				android:text="↓"
+				android:textSize="30sp"/>
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>
+
