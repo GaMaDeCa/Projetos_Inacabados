@@ -1,0 +1,91 @@
+programa{
+	//Bibliotecas
+	//Graficos = Para desenhar na tela
+	inclua biblioteca Graficos --> g
+	//Util = Esperar um tempo(Utilidades diversas)
+	inclua biblioteca Util --> u
+	//Mouse = Reconhece toques de tela ou mouse
+	inclua biblioteca Mouse --> mouse
+	// VOCÊ VAI FAZER SEU CÓDIGO AQUI
+	funcao desenhar(inteiro a){
+		// Pega as coordenadas x e y do "mouse"(toque de tela)
+		inteiro mX = mouse.posicao_x()
+		inteiro mY = mouse.posicao_y()
+		/* Pega os limites da tela que vão desde o 0 até o valor máximo
+		Os limites de uma tela seriam mais ou menos assim:
+		     0
+			 
+		0         largura
+		
+		   altura
+		   
+		Esses limites podem ser interpretados também
+		como coordenadas de um retângulo:
+		      y
+			  
+		x          x2
+		
+		      y2
+		*/
+		inteiro largura=g.largura_janela()
+		inteiro altura=g.altura_janela()
+		//desnecessário os x e y, já que ambos são 0 mesmo
+		//mas é válido caso vc queira reconhecer uma
+		//colisão retangular(nas coordenadas limites do retangulo)
+		
+		// Define a cor do que vai ser desenhado
+		g.definir_cor(g.COR_VERDE)
+		// Para desenhar o circulo e o X
+		inteiro diametroElipse=90
+		inteiro raioElipse=diametroElipse/2
+		
+		//Retangulo com bordas e preenchido em verde
+		//x,y,x2,y2,arredondarBordas,preencherRetangulo
+		g.desenhar_retangulo(0,altura-60,largura,60,verdadeiro,verdadeiro)
+		
+		g.definir_cor(g.COR_AZUL)
+		g.definir_tamanho_texto(25)
+		g.definir_estilo_texto(verdadeiro,falso,falso)
+		g.desenhar_texto(40,altura-40,"github.com/Alien8652")
+		
+		inteiro x=((a+15)%largura)-15,y=altura/2-15//largura/2-15,y=altura/2-15
+		inteiro x2=30,y2=30
+		se (x%(largura*2)>largura)
+		g.desenhar_retangulo(x,y,x2,y2,falso,falso)
+		
+		//Lógica pra detectar uma colisão retangular
+		//usando as coordenadas do meio do toque(mX e mY, sem raio)
+		logico meioDentroDoRetangulo=(mX>x e mX<x+x2)e(mY>y e mY<y+y2)
+		se (meioDentroDoRetangulo)
+			g.definir_cor(g.COR_VERMELHO)
+		g.desenhar_texto(0,0,"Colisão: "+meioDentroDoRetangulo)
+		g.desenhar_texto(0,20,"Alvo Imóvel")
+		
+		g.definir_cor(g.criar_cor(0,255,255))
+		g.desenhar_elipse(mX-raioElipse,mY-raioElipse,diametroElipse,diametroElipse,falso)
+		g.desenhar_linha(mX-raioElipse,mY-raioElipse,mX+raioElipse,mY+raioElipse)
+		g.desenhar_linha(mX-raioElipse,mY+raioElipse,mX+raioElipse,mY-raioElipse)
+	}
+	funcao inicio(){
+		g.definir_titulo_janela("Exemplo \"Tiro ao Alvo\"")
+		// para usar os gráficos
+		g.iniciar_modo_grafico(falso)
+		// 20 milissegundos = 0.02 segundos
+		inteiro delay = 20
+		// Contador para animação
+		inteiro i=0
+		enquanto(verdadeiro){
+			// Pinta o fundo de preto
+			g.definir_cor(g.COR_PRETO)
+			// Liimpa a tela(se não o desenho anterior continua aqui)
+			g.limpar()
+			//Aqui vamos fazer o código de desenho
+			desenhar(i)
+			// desenha na tela tudo
+			g.renderizar()
+			i+=1
+			// espera 20 milisegundos
+			u.aguarde(delay)
+		}
+	}
+}
