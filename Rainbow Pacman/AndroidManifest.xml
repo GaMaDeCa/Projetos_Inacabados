@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="GaMaDeCa.games.rainbowpacmantest">
+	package="alien8652.games.rainbowpacmantest">
 	<uses-sdk
 		android:minSdkVersion="14"
 		android:targetSdkVersion="21"/>
@@ -13,7 +13,7 @@
 		<activity
 			android:label="Rainbow Pacman"
 			android:screenOrientation="portrait"
-			android:name="GaMaDeCa.games.rainbowpacmantest.MainActivity">
+			android:name="alien8652.games.rainbowpacmantest.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
