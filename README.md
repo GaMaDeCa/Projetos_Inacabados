@@ -9,7 +9,7 @@ Idéia: Um pacman personalizável
 ## Códigos em Portugol
 Idéia: Juntar tudo em coleções de exemplos de códigos diversos pra ensinar programação
 
-## For the LULZ
+## LULZ ou TROLL
 Idéia: Pequenos programas para trollagem, leve, moderada ou hardcore
 
 
@@ -19,9 +19,14 @@ Idéia: Pequenos programas para trollagem, leve, moderada ou hardcore
 
 ### Total em ajuda para os projetos finalizarem:
 Pacman Arco-íris R$ 200
+
 Coleções de Exemplos R$ 1200
-LULZ R$ 500
+
+TROLL R$ 500
+
+
 
 Isso ou um notebook bom, pois atualmente programo pelo celular ;)
+
 
 Serviços também são bem-vindos.
