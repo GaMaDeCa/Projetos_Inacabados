@@ -1,6 +1,6 @@
 MENSAGEM="Problema?"
 BOTOES=CStr(vbAbortRetryIgnore+vbCritical) 'Converte Int pra String
-TITULO="Message Bomb(github.com/Alien8652)"
+TITULO="Message Bomb(github.com/GaMaDeCa)"
 
 QTO=3 '3 Mensagens
 'QTO=0 'Modo Infinito(Não recomendado)
