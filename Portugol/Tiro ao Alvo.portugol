@@ -46,7 +46,7 @@ programa{
 		g.definir_cor(g.COR_AZUL)
 		g.definir_tamanho_texto(25)
 		g.definir_estilo_texto(verdadeiro,falso,falso)
-		g.desenhar_texto(40,altura-40,"github.com/Alien8652")
+		g.desenhar_texto(40,altura-40,"github.com/GaMaDeCa")
 		
 		inteiro x=((a+15)%largura)-15,y=altura/2-15//largura/2-15,y=altura/2-15
 		inteiro x2=30,y2=30
