@@ -1,4 +1,4 @@
-package alien8652.games.rainbowpacmantest;
+package GaMaDeCa.games.rainbowpacmantest;
 import android.content.Context;
 import android.view.View;
 import java.util.Random;
