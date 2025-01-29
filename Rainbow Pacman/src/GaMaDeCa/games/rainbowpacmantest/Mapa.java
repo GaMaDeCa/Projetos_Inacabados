@@ -1,4 +1,4 @@
-package alien8652.games.rainbowpacmantest;
+package GaMaDeCa.games.rainbowpacmantest;
 public class Mapa{
 	public static final int[][]mapaOriginal={
 		{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
