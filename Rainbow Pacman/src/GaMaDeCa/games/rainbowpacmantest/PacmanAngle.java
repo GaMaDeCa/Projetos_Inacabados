@@ -1,4 +1,4 @@
-package alien8652.games.rainbowpacmantest;
+package GaMaDeCa.games.rainbowpacmantest;
 //Essa classe serve para movimentar a boca do pacman e também mudar a sua direção 
 //TODO> Criar uma classe "Pacman" com essa embutida
 public class PacmanAngle{
