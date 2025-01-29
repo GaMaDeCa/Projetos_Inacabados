@@ -1,4 +1,4 @@
-package alien8652.games.rainbowpacmantest;
+package GaMaDeCa.games.rainbowpacmantest;
 import android.graphics.*;
 //TODO> Desenhar um fantasma com olhos móveis
 public class Fantasma{
