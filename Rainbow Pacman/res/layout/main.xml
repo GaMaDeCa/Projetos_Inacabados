@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:gravity="center"
-	tools:context="alien8652.games.rainbowpacmantest.MainActivity"
+	tools:context="GaMaDeCa.games.rainbowpacmantest.MainActivity"
 	android:orientation="vertical">
 
 	<alien8652.games.rainbowpacmantest.PacmanGameView
