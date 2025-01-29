@@ -4,9 +4,9 @@ Idéias em pausa(Temporária)
 
 # Lista
 ## Pacman Arco-íris
-Idéia: Um pacman personalizável(opção de mudar a cor do cenário, jogador e npc).
+Idéia: Um pacman personalizável(com opção de mudar a cor do cenário, jogador e npc).
 
-[![Acredita que é só agora que eu descobri que isso é a descrição da imagem? pois é...](https://raw.githubusercontent.com/GaMaDeCa/Projetos_Inacabados/refs/heads/main/Rainbow%20Pacman/R.Png)]
+![Acredita que é só agora que eu descobri que isso é a descrição da imagem? pois é...](https://raw.githubusercontent.com/GaMaDeCa/Projetos_Inacabados/refs/heads/main/Rainbow%20Pacman/R.Png)
 
 ## Códigos em Portugol
 Idéia: Juntar tudo em coleções de exemplos de códigos diversos pra ensinar programação
