@@ -8,7 +8,7 @@
 	tools:context="GaMaDeCa.games.rainbowpacmantest.MainActivity"
 	android:orientation="vertical">
 
-	<alien8652.games.rainbowpacmantest.PacmanGameView
+	<GaMaDeCa.games.rainbowpacmantest.PacmanGameView
 		android:id="@+id/pacView"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent"
