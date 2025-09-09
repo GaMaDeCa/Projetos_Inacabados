@@ -1,5 +1,8 @@
 // Try to use this RLE algorithm to compress some hexadecimal data(RGB images usually have a lot of repeated characters)
 
+// TODO:
+//   Test it with different hex data combinations(I didn't tested it, feel free to test it)
+
 import scala.math.sqrt
 
 object HelloWorld {
@@ -72,7 +75,7 @@ object HelloWorld {
 		// Here's we're gonna join the char count with the respective values(separated by comma ",")
 		// UPDATE > Comma data separation is removed:
 		//  - Good Thing = Data with more Compression Rate(48.16%).
-		//  - Bad Thing = I will need to write a more complex and difficult code to fkn decompress it.
+		//  - Bad Thing = I will need to write a more complex and difficult code to decompress it(YAY, I've finished it!).
 		var RAW_RLE_DATA = "" 
 		for (i <- 0 until RLE_Values.length)
 		  RAW_RLE_DATA += RLE_Counts(i) + RLE_Values(i)
@@ -123,3 +126,4 @@ object HelloWorld {
 
 }
 // Some comments are just not totally related(like in the image size), so it may be confusing to understand how it works, just focus on my custom RLE algorithm, I would answer your questions for a better understanding but not in time, probably it can even take a week for me reply
+
