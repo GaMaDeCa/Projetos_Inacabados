@@ -1,6 +1,15 @@
 % Kaprekar Constant - 6174(Prolog)
 % Computes the Kaprekar Constant.
 
+% Ive made it with the help of ChatGPT
+% Actually the "GPT" didnt make the main code, it just fixed the wrong
+% methods cause it was my first time using this language, it helped me
+% to understand many things though, the other codes are results of my
+% learning(I didnt asked for "AI" to make them), its not hard to program
+% in this language, it may be confusing to program for too long, also,
+% the "fluxogram maker"(using the lib graphivz) is quite good, I never
+% saw something so easy and good, see the "Android Activity Lifecycle" example.
+
 % Convert number to list of digits
 number_to_digits(Number, Digits) :-
     number_chars(Number, Chars),
