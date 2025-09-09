@@ -1,0 +1,49 @@
+:- use_rendering(graphviz).
+
+% Android Activity Lifecyle in Prolog
+% Using graphviz
+% Tested with "SWISH Prolog Online"
+
+% Open the image "Android Activity Lifecycle.svg", you can open it in almost any browser that supports it
+
+X = dot(digraph([
+	"Activity Starts" -> "OnCreate()",
+	"OnCreate()" -> "OnStart()",
+	"OnStart()" -> "OnResume()",
+	"OnResume()" -> "Activity is Running",
+	"Activity is Running" -> "New Activity is Started",
+    "New Activity is Started" -> "OnFreeze()",
+    "OnFreeze()" -> "OnPause()",
+    "OnPause()" -> "Activity in Background(Not Visible)",
+    "OnPause()" -> "Activity comes to Foreground",
+    "OnPause()" -> "Other apps needs memory",
+    "Other apps needs memory" -> "Process is killed",
+    "Process is killed" -> "User open this app again",
+    "User open this app again" -> "OnCreate()",
+    "Activity comes to Foreground" -> "OnResume()",
+    "Activity in Background(Not Visible)" -> "OnStop()",
+    "OnStop()" -> "OnDestroy()",
+    "OnStop()" -> "Other apps needs memory",
+    "OnStop()" -> "Activity comes to Foreground Again",
+    "Activity comes to Foreground Again" -> "OnRestart()",
+    "OnRestart()" -> "OnStart()",
+    "OnDestroy()" -> "Activity Shutdown",
+    node("Activity Starts", [shape=rect, style="rounded, filled", fillcolor=cyan]),
+    node("OnCreate()", [shape=rect, style=filled, fillcolor=lightgreen]),
+    node("OnStart()", [shape=rect, style=filled, fillcolor=lightgreen]),
+    node("OnResume()", [shape=rect, style=filled, fillcolor=lightgreen]),
+    node("Activity is Running", [shape=rect, style="rounded, filled", fillcolor=white]),
+    node("New Activity is Started", [shape=rect, style="rounded, filled", fillcolor=white]),
+    node("OnFreeze()", [shape=rect, style=filled, fillcolor=lightblue]),
+    node("OnPause()", [shape=rect, style=filled, fillcolor=yellow]),
+    node("OnStop()", [shape=rect, style=filled, fillcolor=red]),
+    node("Activity in Background(Not Visible)", [shape=rect, style="rounded, filled", fillcolor=white]),
+    node("Activity comes to Foreground", [shape=rect, style="rounded, filled", fillcolor=white]),   
+    node("Activity comes to Foreground Again", [shape=rect, style="rounded, filled", fillcolor=white]),
+    node("Other apps needs memory", [shape=rect, style="rounded, filled", fillcolor=white]),
+    node("User open this app again", [shape=rect, style="rounded, filled", fillcolor=white]),
+    node("OnRestart()", [shape=rect, style=filled, fillcolor=yellow]),
+    node("OnDestroy()", [shape=rect, style=filled, fillcolor=red]),
+    node("Process is killed", [shape=rect, style="rounded, filled", fillcolor=red]),
+    node("Activity Shutdown", [shape=rect, style="rounded, filled", fillcolor=red])
+])).

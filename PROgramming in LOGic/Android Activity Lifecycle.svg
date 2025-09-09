@@ -1,0 +1,239 @@
+<svg width="738pt" height="908pt" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events" style="overflow: hidden; width: 601.582px; height: 740.158px;"><g id="viewport-20250909060240232" class="svg-pan-zoom_viewport" transform="matrix(0.8149779735682819,0,0,0.8149779735682819,0.27312775330398154,0)" style="transform: matrix(0.814978, 0, 0, 0.814978, 0.273128, 0);">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 904)">
+<title>%3</title>
+
+<g id="node1" class="node">
+<title>Activity Starts</title>
+<path fill="cyan" stroke="black" d="M718,-900C718,-900 622,-900 622,-900 616,-900 610,-894 610,-888 610,-888 610,-876 610,-876 610,-870 616,-864 622,-864 622,-864 718,-864 718,-864 724,-864 730,-870 730,-876 730,-876 730,-888 730,-888 730,-894 724,-900 718,-900"></path>
+<text text-anchor="middle" x="670" y="-878.3" font-family="Times,serif" font-size="14.00">Activity Starts</text>
+</g>
+
+<g id="node2" class="node">
+<title>OnCreate()</title>
+<polygon fill="lightgreen" stroke="black" points="717.5,-828 622.5,-828 622.5,-792 717.5,-792 717.5,-828"></polygon>
+<text text-anchor="middle" x="670" y="-806.3" font-family="Times,serif" font-size="14.00">OnCreate()</text>
+</g>
+
+<g id="edge1" class="edge">
+<title>Activity Starts-&gt;OnCreate()</title>
+<path fill="none" stroke="black" d="M670,-863.7C670,-855.98 670,-846.71 670,-838.11"></path>
+<polygon fill="black" stroke="black" points="673.5,-838.1 670,-828.1 666.5,-838.1 673.5,-838.1"></polygon>
+</g>
+
+<g id="node3" class="node">
+<title>OnStart()</title>
+<polygon fill="lightgreen" stroke="black" points="677,-756 593,-756 593,-720 677,-720 677,-756"></polygon>
+<text text-anchor="middle" x="635" y="-734.3" font-family="Times,serif" font-size="14.00">OnStart()</text>
+</g>
+
+<g id="edge2" class="edge">
+<title>OnCreate()-&gt;OnStart()</title>
+<path fill="none" stroke="black" d="M661.35,-791.7C657.36,-783.73 652.55,-774.1 648.13,-765.26"></path>
+<polygon fill="black" stroke="black" points="651.15,-763.48 643.55,-756.1 644.89,-766.61 651.15,-763.48"></polygon>
+</g>
+
+<g id="node4" class="node">
+<title>OnResume()</title>
+<polygon fill="lightgreen" stroke="black" points="577,-684 473,-684 473,-648 577,-648 577,-684"></polygon>
+<text text-anchor="middle" x="525" y="-662.3" font-family="Times,serif" font-size="14.00">OnResume()</text>
+</g>
+
+<g id="edge3" class="edge">
+<title>OnStart()-&gt;OnResume()</title>
+<path fill="none" stroke="black" d="M608.09,-719.88C593.84,-710.81 576.15,-699.55 560.76,-689.76"></path>
+<polygon fill="black" stroke="black" points="562.33,-686.61 552.01,-684.19 558.57,-692.51 562.33,-686.61"></polygon>
+</g>
+
+<g id="node5" class="node">
+<title>Activity is Running</title>
+<path fill="white" stroke="black" d="M477,-612C477,-612 349,-612 349,-612 343,-612 337,-606 337,-600 337,-600 337,-588 337,-588 337,-582 343,-576 349,-576 349,-576 477,-576 477,-576 483,-576 489,-582 489,-588 489,-588 489,-600 489,-600 489,-606 483,-612 477,-612"></path>
+<text text-anchor="middle" x="413" y="-590.3" font-family="Times,serif" font-size="14.00">Activity is Running</text>
+</g>
+
+<g id="edge4" class="edge">
+<title>OnResume()-&gt;Activity is Running</title>
+<path fill="none" stroke="black" d="M497.6,-647.88C483.09,-638.81 465.08,-627.55 449.41,-617.76"></path>
+<polygon fill="black" stroke="black" points="450.84,-614.52 440.5,-612.19 447.13,-620.46 450.84,-614.52"></polygon>
+</g>
+
+<g id="node6" class="node">
+<title>New Activity is Started</title>
+<path fill="white" stroke="black" d="M448.5,-540C448.5,-540 289.5,-540 289.5,-540 283.5,-540 277.5,-534 277.5,-528 277.5,-528 277.5,-516 277.5,-516 277.5,-510 283.5,-504 289.5,-504 289.5,-504 448.5,-504 448.5,-504 454.5,-504 460.5,-510 460.5,-516 460.5,-516 460.5,-528 460.5,-528 460.5,-534 454.5,-540 448.5,-540"></path>
+<text text-anchor="middle" x="369" y="-518.3" font-family="Times,serif" font-size="14.00">New Activity is Started</text>
+</g>
+
+<g id="edge5" class="edge">
+<title>Activity is Running-&gt;New Activity is Started</title>
+<path fill="none" stroke="black" d="M402.12,-575.7C397.01,-567.56 390.8,-557.69 385.16,-548.7"></path>
+<polygon fill="black" stroke="black" points="388.04,-546.71 379.75,-540.1 382.11,-550.43 388.04,-546.71"></polygon>
+</g>
+
+<g id="node7" class="node">
+<title>OnFreeze()</title>
+<polygon fill="lightblue" stroke="black" points="344,-468 248,-468 248,-432 344,-432 344,-468"></polygon>
+<text text-anchor="middle" x="296" y="-446.3" font-family="Times,serif" font-size="14.00">OnFreeze()</text>
+</g>
+
+<g id="edge6" class="edge">
+<title>New Activity is Started-&gt;OnFreeze()</title>
+<path fill="none" stroke="black" d="M350.96,-503.7C341.94,-495.05 330.88,-484.45 321.06,-475.03"></path>
+<polygon fill="black" stroke="black" points="323.48,-472.5 313.84,-468.1 318.63,-477.55 323.48,-472.5"></polygon>
+</g>
+
+<g id="node8" class="node">
+<title>OnPause()</title>
+<polygon fill="yellow" stroke="black" points="321.5,-396 232.5,-396 232.5,-360 321.5,-360 321.5,-396"></polygon>
+<text text-anchor="middle" x="277" y="-374.3" font-family="Times,serif" font-size="14.00">OnPause()</text>
+</g>
+
+<g id="edge7" class="edge">
+<title>OnFreeze()-&gt;OnPause()</title>
+<path fill="none" stroke="black" d="M291.3,-431.7C289.19,-423.9 286.64,-414.51 284.28,-405.83"></path>
+<polygon fill="black" stroke="black" points="287.64,-404.84 281.64,-396.1 280.88,-406.67 287.64,-404.84"></polygon>
+</g>
+
+<g id="node9" class="node">
+<title>Activity in Background(Not Visible)</title>
+<path fill="white" stroke="black" d="M381.5,-324C381.5,-324 136.5,-324 136.5,-324 130.5,-324 124.5,-318 124.5,-312 124.5,-312 124.5,-300 124.5,-300 124.5,-294 130.5,-288 136.5,-288 136.5,-288 381.5,-288 381.5,-288 387.5,-288 393.5,-294 393.5,-300 393.5,-300 393.5,-312 393.5,-312 393.5,-318 387.5,-324 381.5,-324"></path>
+<text text-anchor="middle" x="259" y="-302.3" font-family="Times,serif" font-size="14.00">Activity in Background(Not Visible)</text>
+</g>
+
+<g id="edge8" class="edge">
+<title>OnPause()-&gt;Activity in Background(Not Visible)</title>
+<path fill="none" stroke="black" d="M272.55,-359.7C270.55,-351.9 268.13,-342.51 265.9,-333.83"></path>
+<polygon fill="black" stroke="black" points="269.28,-332.92 263.4,-324.1 262.5,-334.66 269.28,-332.92"></polygon>
+</g>
+
+<g id="node10" class="node">
+<title>Activity comes to Foreground</title>
+<path fill="white" stroke="black" d="M626.5,-324C626.5,-324 423.5,-324 423.5,-324 417.5,-324 411.5,-318 411.5,-312 411.5,-312 411.5,-300 411.5,-300 411.5,-294 417.5,-288 423.5,-288 423.5,-288 626.5,-288 626.5,-288 632.5,-288 638.5,-294 638.5,-300 638.5,-300 638.5,-312 638.5,-312 638.5,-318 632.5,-324 626.5,-324"></path>
+<text text-anchor="middle" x="525" y="-302.3" font-family="Times,serif" font-size="14.00">Activity comes to Foreground</text>
+</g>
+
+<g id="edge9" class="edge">
+<title>OnPause()-&gt;Activity comes to Foreground</title>
+<path fill="none" stroke="black" d="M321.62,-364.4C358.63,-353.96 411.9,-338.92 454.63,-326.86"></path>
+<polygon fill="black" stroke="black" points="455.74,-330.18 464.42,-324.1 453.84,-323.45 455.74,-330.18"></polygon>
+</g>
+
+<g id="node11" class="node">
+<title>Other apps needs memory</title>
+<path fill="white" stroke="black" d="M194,-180C194,-180 12,-180 12,-180 6,-180 0,-174 0,-168 0,-168 0,-156 0,-156 0,-150 6,-144 12,-144 12,-144 194,-144 194,-144 200,-144 206,-150 206,-156 206,-156 206,-168 206,-168 206,-174 200,-180 194,-180"></path>
+<text text-anchor="middle" x="103" y="-158.3" font-family="Times,serif" font-size="14.00">Other apps needs memory</text>
+</g>
+
+<g id="edge10" class="edge">
+<title>OnPause()-&gt;Other apps needs memory</title>
+<path fill="none" stroke="black" d="M232.25,-375.4C194.65,-371.45 142.74,-359.41 115,-324 84.92,-285.61 90.19,-225.03 96.65,-190.16"></path>
+<polygon fill="black" stroke="black" points="100.11,-190.71 98.65,-180.21 93.25,-189.32 100.11,-190.71"></polygon>
+</g>
+
+<g id="node14" class="node">
+<title>OnStop()</title>
+<polygon fill="red" stroke="black" points="307,-252 227,-252 227,-216 307,-216 307,-252"></polygon>
+<text text-anchor="middle" x="267" y="-230.3" font-family="Times,serif" font-size="14.00">OnStop()</text>
+</g>
+
+<g id="edge15" class="edge">
+<title>Activity in Background(Not Visible)-&gt;OnStop()</title>
+<path fill="none" stroke="black" d="M260.98,-287.7C261.86,-279.98 262.92,-270.71 263.9,-262.11"></path>
+<polygon fill="black" stroke="black" points="267.39,-262.44 265.05,-252.1 260.43,-261.64 267.39,-262.44"></polygon>
+</g>
+
+<g id="edge14" class="edge">
+<title>Activity comes to Foreground-&gt;OnResume()</title>
+<path fill="none" stroke="black" d="M525,-324.05C525,-350.71 525,-403.89 525,-449 525,-523 525,-523 525,-523 525,-563 525,-609.35 525,-637.92"></path>
+<polygon fill="black" stroke="black" points="521.5,-637.95 525,-647.95 528.5,-637.95 521.5,-637.95"></polygon>
+</g>
+
+<g id="node12" class="node">
+<title>Process is killed</title>
+<path fill="red" stroke="black" d="M165,-108C165,-108 57,-108 57,-108 51,-108 45,-102 45,-96 45,-96 45,-84 45,-84 45,-78 51,-72 57,-72 57,-72 165,-72 165,-72 171,-72 177,-78 177,-84 177,-84 177,-96 177,-96 177,-102 171,-108 165,-108"></path>
+<text text-anchor="middle" x="111" y="-86.3" font-family="Times,serif" font-size="14.00">Process is killed</text>
+</g>
+
+<g id="edge11" class="edge">
+<title>Other apps needs memory-&gt;Process is killed</title>
+<path fill="none" stroke="black" d="M104.98,-143.7C105.86,-135.98 106.92,-126.71 107.9,-118.11"></path>
+<polygon fill="black" stroke="black" points="111.39,-118.44 109.05,-108.1 104.43,-117.64 111.39,-118.44"></polygon>
+</g>
+
+<g id="node13" class="node">
+<title>User open this app again</title>
+<path fill="white" stroke="black" d="M480,-36C480,-36 308,-36 308,-36 302,-36 296,-30 296,-24 296,-24 296,-12 296,-12 296,-6 302,0 308,0 308,0 480,0 480,0 486,0 492,-6 492,-12 492,-12 492,-24 492,-24 492,-30 486,-36 480,-36"></path>
+<text text-anchor="middle" x="394" y="-14.3" font-family="Times,serif" font-size="14.00">User open this app again</text>
+</g>
+
+<g id="edge12" class="edge">
+<title>Process is killed-&gt;User open this app again</title>
+<path fill="none" stroke="black" d="M177.35,-72.59C218.58,-62.39 271.79,-49.23 315.16,-38.5"></path>
+<polygon fill="black" stroke="black" points="316.24,-41.84 325.11,-36.04 314.56,-35.04 316.24,-41.84"></polygon>
+</g>
+
+<g id="edge13" class="edge">
+<title>User open this app again-&gt;OnCreate()</title>
+<path fill="none" stroke="black" d="M492.4,-23.87C583.52,-34.31 705,-66.03 705,-161 705,-667 705,-667 705,-667 705,-708.16 690.97,-754.12 680.67,-782.31"></path>
+<polygon fill="black" stroke="black" points="677.33,-781.26 677.08,-791.85 683.88,-783.72 677.33,-781.26"></polygon>
+</g>
+
+<g id="edge17" class="edge">
+<title>OnStop()-&gt;Other apps needs memory</title>
+<path fill="none" stroke="black" d="M226.88,-215.88C204.36,-206.26 176.08,-194.19 152.23,-184.01"></path>
+<polygon fill="black" stroke="black" points="153.56,-180.77 142.99,-180.07 150.81,-187.21 153.56,-180.77"></polygon>
+</g>
+
+<g id="node15" class="node">
+<title>OnDestroy()</title>
+<polygon fill="red" stroke="black" points="328,-180 224,-180 224,-144 328,-144 328,-180"></polygon>
+<text text-anchor="middle" x="276" y="-158.3" font-family="Times,serif" font-size="14.00">OnDestroy()</text>
+</g>
+
+<g id="edge16" class="edge">
+<title>OnStop()-&gt;OnDestroy()</title>
+<path fill="none" stroke="black" d="M269.22,-215.7C270.22,-207.98 271.41,-198.71 272.51,-190.11"></path>
+<polygon fill="black" stroke="black" points="276,-190.47 273.8,-180.1 269.05,-189.58 276,-190.47"></polygon>
+</g>
+
+<g id="node16" class="node">
+<title>Activity comes to Foreground Again</title>
+<path fill="white" stroke="black" d="M620,-180C620,-180 372,-180 372,-180 366,-180 360,-174 360,-168 360,-168 360,-156 360,-156 360,-150 366,-144 372,-144 372,-144 620,-144 620,-144 626,-144 632,-150 632,-156 632,-156 632,-168 632,-168 632,-174 626,-180 620,-180"></path>
+<text text-anchor="middle" x="496" y="-158.3" font-family="Times,serif" font-size="14.00">Activity comes to Foreground Again</text>
+</g>
+
+<g id="edge18" class="edge">
+<title>OnStop()-&gt;Activity comes to Foreground Again</title>
+<path fill="none" stroke="black" d="M307.15,-220.73C341.16,-210.33 390.59,-195.22 430.35,-183.07"></path>
+<polygon fill="black" stroke="black" points="431.43,-186.4 439.97,-180.13 429.39,-179.7 431.43,-186.4"></polygon>
+</g>
+
+<g id="node18" class="node">
+<title>Activity Shutdown</title>
+<path fill="red" stroke="black" d="M338,-108C338,-108 214,-108 214,-108 208,-108 202,-102 202,-96 202,-96 202,-84 202,-84 202,-78 208,-72 214,-72 214,-72 338,-72 338,-72 344,-72 350,-78 350,-84 350,-84 350,-96 350,-96 350,-102 344,-108 338,-108"></path>
+<text text-anchor="middle" x="276" y="-86.3" font-family="Times,serif" font-size="14.00">Activity Shutdown</text>
+</g>
+
+<g id="edge21" class="edge">
+<title>OnDestroy()-&gt;Activity Shutdown</title>
+<path fill="none" stroke="black" d="M276,-143.7C276,-135.98 276,-126.71 276,-118.11"></path>
+<polygon fill="black" stroke="black" points="279.5,-118.1 276,-108.1 272.5,-118.1 279.5,-118.1"></polygon>
+</g>
+
+<g id="node17" class="node">
+<title>OnRestart()</title>
+<polygon fill="yellow" stroke="black" points="611.5,-108 510.5,-108 510.5,-72 611.5,-72 611.5,-108"></polygon>
+<text text-anchor="middle" x="561" y="-86.3" font-family="Times,serif" font-size="14.00">OnRestart()</text>
+</g>
+
+<g id="edge19" class="edge">
+<title>Activity comes to Foreground Again-&gt;OnRestart()</title>
+<path fill="none" stroke="black" d="M512.07,-143.7C519.94,-135.22 529.56,-124.86 538.17,-115.58"></path>
+<polygon fill="black" stroke="black" points="540.88,-117.81 545.12,-108.1 535.75,-113.05 540.88,-117.81"></polygon>
+</g>
+
+<g id="edge20" class="edge">
+<title>OnRestart()-&gt;OnStart()</title>
+<path fill="none" stroke="black" d="M597.96,-108.18C613.24,-116.95 629.93,-128.98 641,-144 665.44,-177.18 667,-191.79 667,-233 667,-595 667,-595 667,-595 667,-635.96 654.17,-681.98 644.76,-710.23"></path>
+<polygon fill="black" stroke="black" points="641.41,-709.2 641.48,-719.79 648.03,-711.47 641.41,-709.2"></polygon>
+</g>
+</g>
+</g></svg>
