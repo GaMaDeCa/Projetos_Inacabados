@@ -33,9 +33,11 @@ object RLE_with_Base71 {
 	
 	// It's not a bug, it's a feature(well at least for me it works)
 	def b712dec(B71: String): Int = {
-	  var Dec = RLE_CUSTOM_NUMBER_TABLE71.indexOf(B71(0))
-	  for (i <- 1 until B71.length) {
-	    Dec += RLE_CUSTOM_NUMBER_TABLE71.indexOf(B71(i)) * (i*71)
+	  var Dec = 0
+	  var bs = 1
+	  for (i <- 0 until B71.length) {
+	    Dec += RLE_CUSTOM_NUMBER_TABLE71.indexOf(B71(i)) * bs
+		bs *= 71
 	  }
 	  Dec
 	}
@@ -126,4 +128,5 @@ object RLE_with_Base71 {
 
 }
 // Some comments are just not totally related(like in the image size), so it may be confusing to understand how it works, just focus on my custom RLE algorithm, I would answer your questions for a better understanding but not in time, probably it can even take a week for me reply
+
 
