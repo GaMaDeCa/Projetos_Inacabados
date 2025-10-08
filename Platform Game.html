@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Platform Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      background-color: lightblue;
+    }
+  </style>
+</head>
+<body>
+<canvas id="gameCanvas" width="500" height="500"></canvas>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const GRAVITY = 0.5;
+const FRICTION = 0.8;
+
+// Key Map
+let keys = {};
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+
+// Map and Camera
+const world = {
+  width: 3000,
+  height: 2000
+};
+
+let camera = {
+  x: 0,
+  y: 0,
+  width: canvas.width,
+  height: canvas.height
+};
+
+// Player
+const player = {
+  x: 100,
+  y: 100,
+  width: 40,
+  height: 70,
+  dx: 0,
+  dy: 0,
+  speed: 5,
+  jumpForce: -12,
+  grounded: false,
+  color: "black",
+  collected: 0
+};
+
+// Platforms
+const platforms = [
+  { x: 0, y: 550, width: 3000, height: 50 }, // floor
+  { x: 250, y: 450, width: 250, height: 50 }, // first tower
+  { x: 275, y: 350, width: 200, height: 30 },
+  { x: 300, y: 250, width: 150, height: 20 },
+  { x: 325, y: 180, width: 100, height: 5 }, // top
+  { x: 600, y: 450, width: 150, height: 20 },
+  { x: 800, y: 350, width: 150, height: 20 },
+  { x: 1000, y: 250, width: 150, height: 20 },
+  { x: 1300, y: 150, width: 150, height: 20 }, // diagonal tower
+  { x: 1600, y: 450, width: 150, height: 20 },
+  { x: 1900, y: 350, width: 150, height: 20 },
+  { x: 2200, y: 250, width: 150, height: 20 },
+  { x: 2770, y: 530, width: 145, height: 20 },
+  { x: 2800, y: 430, width: 70, height: 100, isDoor: true }, // final door
+];
+
+// Coins(collectable items)
+let items = [
+  { x: 680, y: 410, width: 20, height: 20, collected: false },
+  { x: 650, y: 410, width: 20, height: 20, collected: false },
+  { x: 1350, y: 110, width: 20, height: 20, collected: false },
+  { x: 2250, y: 210, width: 20, height: 20, collected: false },
+  { x: 320, y: 130, width: 20, height: 20, collected: false },
+  { x: 350, y: 130, width: 20, height: 20, collected: false },
+  { x: 380, y: 130, width: 20, height: 20, collected: false },
+  { x: 410, y: 130, width: 20, height: 20, collected: false }
+];
+
+// Enemies
+let enemies = [
+  { x: 600, y: 430, width: 30, height: 20, dx: 1, minX: 600, maxX: 750 },
+  { x: 1900, y: 330, width: 30, height: 20, dx: 1, minX: 1900, maxX: 2050 },
+  { x: 500, y: 530, width: 30, height: 20, dx: 1, minX: 500, maxX: 2050 },
+  { x: 500, y: 530, width: 30, height: 20, dx: 3, minX: 500, maxX: 2050 } // Fast enemy
+];
+
+// Game loop
+function update() {
+  // Movement
+  player.dx = 0;
+  if (keys["ArrowLeft"]) player.dx = -player.speed;
+  if (keys["ArrowRight"]) player.dx = player.speed;
+  if (keys[" "] && player.grounded) {
+    player.dy = player.jumpForce;
+    player.grounded = false;
+  }
+
+  // Physics
+  player.dy += GRAVITY;
+  player.x += player.dx;
+  player.y += player.dy;
+
+  // Platform collision
+  player.grounded = false;
+  for (let plat of platforms) {
+    if (plat.isDoor) {
+		// Rectangular collision
+		if ((player.x + player.width > plat.x && player.x < plat.x + plat.width) &&
+			(player.y + player.height > plat.y && player.y < plat.y + plat.height)) {
+			if (player.collected >= items.length) {
+				resetGame();
+				alert("End Game!\nCongratulations!");
+			}
+		}
+	} else if (
+      player.x < plat.x + plat.width &&
+      player.x + player.width > plat.x &&
+      player.y + player.height < plat.y + 10 &&
+      player.y + player.height + player.dy >= plat.y
+    ) {
+      player.y = plat.y - player.height;
+      player.dy = 0;
+      player.grounded = true;
+    }
+  }
+  // World Bounds Collision
+  if (player.x < 0)
+	player.x = 0;
+  else if (player.x + player.width > world.width)
+	player.x = world.width - player.width;
+  else if (player.y + player.height > world.height)
+	resetGame();
+
+  // Camera follows player (horizontal and vertical)
+  const centerX = camera.width / 2;
+  const centerY = camera.height / 2;
+  if (player.x - camera.x > centerX) {
+    camera.x = player.x - centerX;
+  } else if (player.x - camera.x < centerX * 0.5) {
+    camera.x = player.x - centerX * 0.5;
+  }
+
+  if (player.y - camera.y > centerY) {
+    camera.y = player.y - centerY;
+  } else if (player.y - camera.y < centerY * 0.5) {
+    camera.y = player.y - centerY * 0.5;
+  }
+
+  // Camera Limits
+  camera.x = Math.max(0, Math.min(camera.x, world.width - camera.width));
+  camera.y = Math.max(0, Math.min(camera.y, world.height - camera.height));
+
+  for (let item of items) {
+    if (!item.collected &&
+      player.x < item.x + item.width &&
+      player.x + player.width > item.x &&
+      player.y < item.y + item.height &&
+      player.y + player.height > item.y
+    ) {
+      item.collected = true;
+      player.collected++;
+    }
+  }
+
+  // Enemies
+  for (let enemy of enemies) {
+    enemy.x += enemy.dx;
+    if (enemy.x < enemy.minX || enemy.x + enemy.width > enemy.maxX) {
+      enemy.dx *= -1;
+    }
+
+    // Enemy collision = reset
+    if (
+      player.x < enemy.x + enemy.width &&
+      player.x + player.width > enemy.x &&
+      player.y < enemy.y + enemy.height &&
+      player.y + player.height > enemy.y
+    ) {
+	  // Died
+      resetGame();
+    }
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.save();
+  ctx.translate(-camera.x, -camera.y);
+
+  // Platform
+  for (let plat of platforms) {
+    ctx.fillStyle = plat.isDoor ? "green" : "#775511";
+    ctx.fillRect(plat.x, plat.y, plat.width, plat.height);
+  }
+
+  // The coins
+  for (let item of items) {
+    if (!item.collected) {
+      ctx.fillStyle = "gold";
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+    }
+  }
+
+  // Enemy
+  for (let enemy of enemies) {
+    ctx.fillStyle = "red";
+    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+  }
+
+  // Player
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+
+  ctx.restore();
+
+  // HUD
+  ctx.fillStyle = "black";
+  ctx.font = "20px Arial";
+  ctx.fillText(`Collected items(door activation): ${player.collected}/${items.length}`, 20, 30);
+}
+
+function resetGame() {
+  player.x = 100;
+  player.y = 100;
+  player.dx = 0;
+  player.dy = 0;
+  player.collected = 0;
+  camera.x = 0;
+  camera.y = 0;
+  items.forEach(item => item.collected = false);
+}
+
+function gameLoop() {
+  update();
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+
+function resizeGame() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  camera.width = canvas.width;
+  camera.height = canvas.height;
+}
+
+resizeGame();
+window.addEventListener("resize", resizeGame);
+
+gameLoop();
+</script>
+</body>
+</html>
