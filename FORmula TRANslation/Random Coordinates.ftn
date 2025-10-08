@@ -1,0 +1,50 @@
+! Generate Random 3D Coordinates for a Cube(Rectangular)
+program random_coordinates
+	real :: r
+    integer :: x, y, z, x2, y2, z2, width, height, depth
+	integer :: c ! Temp Coordinate
+	
+	width = 200 + 1		! X
+	height = 100 + 1	! Y
+	depth = 150 + 1		! Z
+	
+    call random_seed()
+	
+	! Left Front
+	call random_number(r)
+	x = int(r * width)
+	
+	! Top Front
+	call random_number(r)
+	y = int(r * height)
+	
+	! Back Top
+	call random_number(r)
+	z = int(r * depth)
+	
+	! Right Front
+	call random_number(r)
+	x2 = int(r * width)
+	
+	! Bottom Front
+	call random_number(r)
+	y2 = int(r * height)
+	
+	! Back Bottom
+	call random_number(r)
+	z2 = int(r * depth)
+	
+	! Fix
+	c = Min(x, x2)
+	x2 = Max(x, x2)
+	x = c
+	
+	c = Min(y, y2)
+	y2 = Max(y, y2)
+	y = c
+	
+	c = Min(z, z2)
+	z2 = Max(z, z2)
+	z = c
+    print *, "", x, ",", y, ",", z, ",", x2, ",", y2, ",", z2
+end program random_coordinates
