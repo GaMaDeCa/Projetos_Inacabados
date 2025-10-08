@@ -1,0 +1,7 @@
+"I never knew I would struggle to do some simple algorithm, this ins't even BF, at least I can print"
+
+Transcript show: 'Hello World!'; cr.
+
+" There's a short way too
+'Hello World!' printNl.
+"
