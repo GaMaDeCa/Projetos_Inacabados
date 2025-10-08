@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Googly Eyes</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      background: black;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<script>
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const eyeballImage = new Image();
+  const pupilImage = new Image();
+  const lightImage = new Image();
+
+  eyeballImage.src = "./Layers/0.png";
+  pupilImage.src = "./Layers/1.png";
+  lightImage.src = "./Layers/2.png";
+
+  const eyeballSize = 350;
+  const pupilSize = 180;
+  const lightSize = 160;
+
+  const eyeballRadius = eyeballSize / 2;
+  const maxPupilOffset = eyeballRadius - pupilSize / 2;
+
+  const eyes = [
+    { center: { x: 0, y: 0 }, pupil: { x: 0, y: 0 } }, // Left
+    { center: { x: 0, y: 0 }, pupil: { x: 0, y: 0 } }  // Right
+  ];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Position eyes (left and right)
+    const spacing = canvas.width / 4;
+    const midY = canvas.height / 2;
+
+    eyes[0].center = { x: spacing, y: midY };
+    eyes[1].center = { x: canvas.width - spacing, y: midY };
+
+    // Reset pupils to center
+    for (const eye of eyes) {
+      eye.pupil.x = eye.center.x;
+      eye.pupil.y = eye.center.y;
+    }
+
+    draw();
+  }
+
+  window.addEventListener("resize", resizeCanvas);
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (const eye of eyes) {
+      ctx.drawImage(
+        eyeballImage,
+        eye.center.x - eyeballRadius,
+        eye.center.y - eyeballRadius,
+        eyeballSize,
+        eyeballSize
+      );
+      ctx.drawImage(
+        pupilImage,
+        eye.pupil.x - pupilSize / 2,
+        eye.pupil.y - pupilSize / 2,
+        pupilSize,
+        pupilSize
+      );
+      // Draw light reflection centered over pupil
+      ctx.drawImage(
+        lightImage,
+        eye.pupil.x - lightSize / 2,
+        eye.pupil.y - lightSize / 2,
+        lightSize,
+        lightSize
+      );
+    }
+  }
+
+  // === Pupil Movement ===
+  function updateEyes(mouseX, mouseY) {
+    for (const eye of eyes) {
+      const dx = mouseX - eye.center.x;
+      const dy = mouseY - eye.center.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance <= maxPupilOffset) {
+        eye.pupil.x = mouseX;
+        eye.pupil.y = mouseY;
+      } else {
+        const angle = Math.atan2(dy, dx);
+        eye.pupil.x = eye.center.x + Math.cos(angle) * maxPupilOffset;
+        eye.pupil.y = eye.center.y + Math.sin(angle) * maxPupilOffset;
+      }
+    }
+
+    draw();
+  }
+
+  // Mouse/Touch
+  function onMove(e) {
+    e.preventDefault();
+    let x, y;
+    if (e.touches && e.touches.length > 0) {
+      x = e.touches[0].clientX;
+      y = e.touches[0].clientY;
+    } else {
+      x = e.clientX;
+      y = e.clientY;
+    }
+
+    updateEyes(x, y);
+  }
+
+  canvas.addEventListener("mousemove", onMove);
+  canvas.addEventListener("touchmove", onMove, { passive: false });
+
+  let imagesLoaded = 0;
+  function onImageLoad() {
+    imagesLoaded++;
+    if (imagesLoaded === 3) {
+      resizeCanvas(); 
+    }
+  }
+
+  eyeballImage.onload = onImageLoad;
+  pupilImage.onload = onImageLoad;
+  lightImage.onload = onImageLoad;
+</script>
+</body>
+</html>
