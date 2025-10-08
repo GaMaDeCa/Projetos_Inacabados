@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Color Roulette</title>
+</head>
+<body style="display: flex; flex-direction: column; align-items: center;">
+
+  <div style="position: relative; width: 400px; height: 400px;">
+    <canvas id="rouletteCanvas" width="400" height="400"></canvas>
+    <img onclick="changePng()" src="pin.png" id="pin" style="position: absolute; left: -70px; top: 150px; width: 100px; transform: rotate(90deg);" />
+  </div>
+
+  <button onclick="spin()" style="margin-top: 40px; padding: 10px 20px; font-size: 18px;">Spin</button>
+  <div id="result" style="margin-top: 20px; font-size: 20px; font-weight: bold; font-color: black; text-shadow: 2px 2px 2px #ffffff;">Selected Color: None</div>
+
+  <script>
+    const colorSegments = ['Fuchsia', 'Blue Indigo', 'Yellow', 'Green', 'Black', 'Red Sweet Chilli', 'Deep Pink', 'Vivid Violet'];
+    const colorHex = ['#D410F7', '#0B06F0', '#F7E410', '#06F027', '#000000', '#F71010', '#F006B1', '#8D10F7'];
+    const numSegments = colorSegments.length;
+    const segmentAngle = 360 / numSegments;
+	
+	const pinPng = 'pin.png', pinDetailedPng = 'pin_without_details.png',
+		  roulettePng = 'roulette.png', rouletteDetailedPng = 'roulette_without_details.png';
+	let detailed = false;
+	
+    const canvas = document.getElementById('rouletteCanvas');
+    const ctx = canvas.getContext('2d');
+    const wheelImg = new Image();
+    wheelImg.src = roulettePng;
+
+    const pin = document.getElementById('pin');
+    const resultText = document.getElementById('result');
+
+    let currentRotation = 0;
+    let spinning = false;
+
+    wheelImg.onload = () => {
+      drawWheel(currentRotation);
+    };
+	
+	function changePng() {
+		detailed = !detailed;
+		wheelImg.src = detailed ? rouletteDetailedPng : roulettePng;
+		pin.src = detailed ? pinDetailedPng : pinPng;
+	}
+	
+    function drawWheel(angleDegrees) {
+      const angleRadians = angleDegrees * Math.PI / 180;
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(angleRadians);
+      ctx.drawImage(wheelImg, -centerX, -centerY, canvas.width, canvas.height);
+      ctx.restore();
+    }
+
+    function spin() {
+      if (spinning)
+		return;
+      spinning = true;
+
+      const spinDegrees = Math.floor(Math.random() * 360) + 360 * (5 + Math.floor(Math.random() * 5));
+      const duration = 5000;
+      const start = performance.now();
+      const startRotation = currentRotation;
+      const targetRotation = currentRotation + spinDegrees;
+
+      let lastSegmentIndex = null;
+
+      function animate(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const angle = startRotation + (targetRotation - startRotation) * eased;
+
+        drawWheel(angle);
+
+        const normalizedAngle = (angle % 360 + 360) % 360;
+        const pointerAngle = (360 + 180 - normalizedAngle) % 360;
+        const segmentIndex = Math.floor(pointerAngle / segmentAngle);
+
+        if (segmentIndex !== lastSegmentIndex) {
+          tremblePin();
+          lastSegmentIndex = segmentIndex;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          currentRotation = targetRotation % 360;
+
+          const finalPointerAngle = (360 + 180 - currentRotation) % 360;
+          const index = Math.floor(finalPointerAngle / segmentAngle);
+
+          resultText.textContent = `Selected Color: ${colorSegments[index]}`;
+          document.body.style.backgroundColor = colorHex[index];
+
+          spinning = false;
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+	
+	let pinRotation = 90;
+	// With this function we can add also the sound of the pin hitting the roulette
+	function tremblePin() {
+		let direction = 1;
+		let count = 0;
+
+		const interval = setInterval(() => {
+			const wiggle = 5 * direction;
+			pin.style.transform = `rotate(${pinRotation + wiggle}deg)`;
+
+			direction *= -1;
+			count++;
+
+			if (count >= 6) {
+				clearInterval(interval);
+				pin.style.transform = `rotate(${pinRotation}deg)`;
+			}
+		}, 30);
+	}
+  </script>
+</body>
+</html>
