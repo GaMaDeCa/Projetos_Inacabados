@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Sin, Cos and Tan</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+      overflow: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    canvas {
+      display: block;
+	  touch-action: none;
+	 }
+
+    .controls {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 10;
+    }
+
+    .controls label,
+    .controls input,
+    .controls select {
+      display: block;
+      margin: 5px 0;
+      color: inherit;
+    }
+
+    .controls input[type="number"],
+    .controls input[type="range"],
+    .controls input[type="color"] {
+      width: 120px;
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      padding: 4px;
+    }
+
+    .top-right {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 10;
+    }
+
+    .top-right button {
+      background: transparent;
+      border: 1px solid;
+      padding: 6px 12px;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    /* Black Theme */
+    body.dark {
+      background: #111;
+      color: #0f0;
+    }
+
+    body.dark .controls,
+    body.dark .top-right {
+      border: 1px solid #0f0;
+    }
+
+    /* Light Theme*/
+    body.light {
+      background: #f5f5f5;
+      color: orange;
+    }
+
+    body.light .controls,
+    body.light .top-right {
+      border: 1px solid orange;
+    }
+
+    body.light input,
+    body.light select,
+    body.light label {
+      color: orange !important;
+    }
+  </style>
+</head>
+<body class="dark">
+
+<div class="controls">
+  <label for="speed">Speed:</label>
+  <input type="number" id="speed" value="0.02" step="0.01" min="0.001" max="2">
+
+  <label for="radius">Circle Radius:</label>
+  <input type="range" id="radius" min="50" max="400" value="80">
+
+  <label for="sinColor">Sin Color:</label>
+  <input type="color" id="sinColor" value="#ff0000">
+
+  <label for="cosineColor">Cosine Color:</label>
+  <input type="color" id="cosineColor" value="#0000ff">
+  <label for="tangentColor">Tangent Color:</label>
+  <input type="color" id="tangentColor" value="#ffa800">
+</div>
+
+<div class="top-right">
+  <button id="goFullscreen">Fullscreen</button>
+  <button id="toggleTheme">Change Theme</button>
+  <button id="togglePause">Pause</button>
+  <button id="resetCircle">Reset</button>
+</div>
+
+<canvas id="canvas"></canvas>
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const speedInput = document.getElementById('speed');
+  const radiusInput = document.getElementById('radius');
+  const sinColorInput = document.getElementById('sinColor');
+  const cosineColorInput = document.getElementById('cosineColor');
+  const tangentColorInput = document.getElementById('tangentColor');
+  const goFullscreenBtn = document.getElementById('goFullscreen');
+  const toggleThemeBtn = document.getElementById('toggleTheme');
+
+  let isPaused = false;
+
+  let width, height;
+  let centerX, centerY;
+  let radius = parseInt(radiusInput.value);
+  let angle = 0;
+  let speed = parseFloat(speedInput.value);
+  let sinTrail = [];
+  let cosineTrail = [];
+
+  let dragging = false;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+  
+  let middleWidth = 0, middleHeight = 0;
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    width = canvas.width;
+    height = canvas.height;
+	
+	middleWidth = width / 2;
+	middleHeight = height / 2;
+    if (!centerX || !centerY) {
+      centerX = middleWidth;
+      centerY = middleHeight;
+    }
+  }
+
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+function requestFullScreen() {
+
+  var el = document.body;
+
+  // Supports most browsers and their versions.
+  var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen 
+  || el.mozRequestFullScreen || el.msRequestFullScreen;
+
+  if (requestMethod) {
+
+    // Native full screen.
+    requestMethod.call(el);
+
+  } else if (typeof window.ActiveXObject !== "undefined") {
+
+    // Older IE.
+    var wscript = new ActiveXObject("WScript.Shell");
+
+    if (wscript !== null) {
+      wscript.SendKeys("{F11}");
+    }
+  }
+}
+
+  goFullscreenBtn.addEventListener('click', requestFullScreen);
+
+ document.getElementById('togglePause').addEventListener('click', () => {
+	isPaused = !isPaused;
+	document.getElementById('togglePause').textContent = isPaused ? 'Retomar' : 'Pausar';
+  });
+  
+  document.getElementById('resetCircle').addEventListener('click', () => {
+	centerX = width / 2;
+	centerY = height / 2;
+  });
+
+  toggleThemeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    document.body.classList.toggle('light');
+  });
+
+  speedInput.addEventListener('input', () => {
+    const val = parseFloat(speedInput.value);
+    if (!isNaN(val) && val > 0) speed = val;
+  });
+
+  radiusInput.addEventListener('input', () => {
+    const val = parseInt(radiusInput.value);
+    if (!isNaN(val) && val > 10) radius = val;
+  });
+
+  canvas.addEventListener('mousedown', (e) => {
+    const dx = e.clientX - centerX;
+    const dy = e.clientY - centerY;
+    if (Math.sqrt(dx * dx + dy * dy) <= radius + 10) {
+      dragging = true;
+      dragOffsetX = dx;
+      dragOffsetY = dy;
+    }
+  });
+
+  canvas.addEventListener('mouseup', () => dragging = false);
+  canvas.addEventListener('mouseleave', () => dragging = false);
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (dragging) {
+      centerX = e.clientX - dragOffsetX;
+      centerY = e.clientY - dragOffsetY;
+    }
+  });
+
+  canvas.addEventListener('click', (e) => {
+    const dx = e.clientX - centerX;
+    const dy = e.clientY - centerY;
+    if (Math.sqrt(dx * dx + dy * dy) > radius + 10) {
+      centerX = e.clientX;
+      centerY = e.clientY;
+    }
+  });
+  // Phone Touch Support
+canvas.addEventListener('touchstart', (e) => {
+  e.preventDefault(); // avoid page scroll
+  const touch = e.touches[0];
+  const dx = touch.clientX - centerX;
+  const dy = touch.clientY - centerY;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  if (distance < radius + 10) {
+    isDragging = true;
+    dragOffsetX = dx;
+    dragOffsetY = dy;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  const touch = e.touches[0];
+  centerX = touch.clientX - dragOffsetX;
+  centerY = touch.clientY - dragOffsetY;
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+  isDragging = false;
+});
+
+  function drawGrid() {
+    const gridSize = 25;
+    ctx.strokeStyle = document.body.classList.contains('dark') ? '#222' : '#ddd';
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x <= width; x += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+
+    for (let y = 0; y <= height; y += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    }
+  }
+
+  function drawAxes() {
+    ctx.strokeStyle = document.body.classList.contains('dark') ? '#0f0' : 'orange';
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(0, middleHeight);     //ctx.moveTo(0, centerY); // Follow circle
+    ctx.lineTo(width, middleHeight); //ctx.lineTo(width, centerY);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(middleWidth, 0);      //ctx.moveTo(centerX, 0); // Follow circle
+    ctx.lineTo(middleWidth, height); //ctx.lineTo(centerX, height);
+    ctx.stroke();
+  }
+
+  function draw() {
+	if (isPaused) {
+		requestAnimationFrame(draw); // keeps calling
+		return;
+	}
+
+    ctx.clearRect(0, 0, width, height);
+
+    drawGrid();
+    drawAxes();
+
+    // Main Circle
+    ctx.strokeStyle = document.body.classList.contains('dark') ? '#888' : '#555';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    ctx.stroke();
+	
+	// Purple point inside the circle
+	ctx.fillStyle = '#f0f';
+	ctx.beginPath();
+	ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+	ctx.fill();
+	
+    // Moving circle point
+   const x = centerX + radius * Math.cos(angle);
+   const y = centerY + radius * Math.sin(angle);
+
+	ctx.fillStyle = '#0f0'; // green
+	ctx.beginPath();
+	ctx.arc(x, y, 8, 0, Math.PI * 2);
+	ctx.fill();
+
+    // Center  to the point unit vetor (blue/cyan line)
+    const vetorColor = document.body.classList.contains('dark') ? '#0ff' : '#00aaff';
+    /*ctx.strokeStyle = vetorColor;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY);
+    ctx.lineTo(x, y);
+    ctx.stroke();*/
+
+    // Projection sin lind (vertical)
+    const sinX = middleWidth; //centerX; // Follow the circle
+    const sinY = y;
+
+    ctx.strokeStyle = sinColorInput.value;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(sinX, sinY);
+    ctx.stroke();
+
+    ctx.fillStyle = sinColorInput.value;
+    ctx.beginPath();
+    ctx.arc(sinX, sinY, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Projection cosine line (horizontal)
+    const cosineX = x;
+    const cosineY = middleHeight; //centerY; // Follow the circle
+
+    ctx.strokeStyle = cosineColorInput.value;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(cosineX, cosineY);
+    ctx.stroke();
+
+    ctx.fillStyle = cosineColorInput.value;
+    ctx.beginPath();
+    ctx.arc(cosineX, cosineY, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // sin history (line in Y axis)
+    sinTrail.unshift(Math.sin(angle));
+    if (sinTrail.length > width / 2) sinTrail.pop();
+
+    ctx.beginPath();
+    for (let i = 0; i < sinTrail.length; i++) {
+      const tx = sinX - i;
+      const ty = centerY + sinTrail[i] * radius;
+      if (i === 0) ctx.moveTo(tx, ty);
+      else ctx.lineTo(tx, ty);
+    }
+    ctx.strokeStyle = sinColorInput.value;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // cosine
+    cosineTrail.unshift(Math.cos(angle));
+    if (cosineTrail.length > height / 2) cosineTrail.pop();
+
+    ctx.beginPath();
+    for (let i = 0; i < cosineTrail.length; i++) {
+      const tx = centerX + cosineTrail[i] * radius;
+      const ty = cosineY - i;
+      if (i === 0) ctx.moveTo(tx, ty);
+      else ctx.lineTo(tx, ty);
+    }
+    ctx.strokeStyle = cosineColorInput.value;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+   
+     // Tangent Computing
+     const sinValue = Math.sin(angle);
+     const cosValue = Math.cos(angle);
+     let tanValue = null;
+     if (Math.abs(cosValue) > 0.0001) {
+       tanValue = sinValue / cosValue;
+     }
+     // when defined draw
+    if (tanValue !== null) {
+       // slope = (y - y0) / (x - x0) = tanValue
+       // => y = tanValue * (x - x0) + y0
+       ctx.strokeStyle = tangentColorInput.value;
+       ctx.lineWidth = 1.5;
+
+       const len = 200;
+       // positive and negative directions
+       const x1 = x - len;
+       const y1 = tanValue * (x1 - x) + y;
+       const x2 = x + len;
+       const y2 = tanValue * (x2 - x) + y;
+       ctx.beginPath();
+       ctx.moveTo(x1, y1);
+       ctx.lineTo(x2, y2);
+       ctx.stroke();
+   }
+   // Numeric Info
+   const deg = angle * 180 / Math.PI;
+   const freq = (speed / (2 * Math.PI)).toFixed(3);
+   const periodo = (1 / freq).toFixed(3);
+	ctx.font = '12px monospace';
+  //Sin info
+	ctx.fillStyle = sinColorInput.value;
+	ctx.fillText(`Sin(θ): ${Math.sin(angle).toFixed(3)} | y: ${y.toFixed(1)}`, 20, 50);
+  // Cosine Info
+	ctx.fillStyle = cosineColorInput.value;
+	ctx.fillText(`Cosine(θ): ${Math.cos(angle).toFixed(3)} | x: ${x.toFixed(1)}`, 20, 70);
+   // Tangent info
+   ctx.fillStyle = tangentColorInput.value;
+   if (tanValue !== null) {
+      ctx.fillText(`Tangent: ${tanValue.toFixed(3)}`, 20, 90);
+   } else {
+      ctx.fillText(`Tangent: undefined`, 20, 90);
+   }
+	// Angle (in rad and degrees)
+	ctx.fillStyle = document.body.classList.contains('dark') ? '#0f0' : 'orange';
+	ctx.fillText(`Angle: ${angle.toFixed(2)} rad | ${(angle * 180 / Math.PI).toFixed(1)}°`, 20, 30);
+
+	// More infos
+  ctx.fillText(`Dimension: (${canvas.width}, ${canvas.height})`, 20, 110);
+	ctx.fillText(`Green point coords: (${x.toFixed(1)}, ${y.toFixed(1)})`, 20, 130);
+	ctx.fillText(`Circle center(purple point): (${centerX.toFixed(1)}, ${centerY.toFixed(1)})`, 20, 150);
+	ctx.fillText(`Frequency ≈ ${freq} Hz`, 20, 170);
+	ctx.fillText(`Period ≈ ${periodo} s`, 20, 190);
+	ctx.fillText(`Amplitude = ${radius.toFixed(0)} px`, 20, 210);
+
+
+    angle += speed;
+	angle %= (Math.PI * 2); // 0 to 2π radians
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+</script>
+</body>
+</html>
+
