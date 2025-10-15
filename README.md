@@ -1,34 +1,21 @@
-# Projetos Inacabados
-Idéias em pausa(Temporária)
+# Random Codes
+
+## Rainbow Pacman
+Main Idea: A customizable pacman(with option to change everything, the scenario, background and game objects colors(player included).
+
+![I sure didn't know that there was image descriptions...](https://raw.githubusercontent.com/GaMaDeCa/RandomCode/refs/heads/main/Rainbow%20Pacman/R.Png)
+
+## Portugol Codes
+Main Idea: Example codes for learning, but it is in Portuguese(badum tss).
+
+## LULZ or TROLL
+Main Idea: Small programs for trolling, but easy/moderated... sometimes overly annoying too.
 
 
-# Lista
-## Pacman Arco-íris
-Idéia: Um pacman personalizável(com opção de mudar a cor do cenário, jogador e npc).
-
-![Acredita que é só agora que eu descobri que isso é a descrição da imagem? pois é...](https://raw.githubusercontent.com/GaMaDeCa/Projetos_Inacabados/refs/heads/main/Rainbow%20Pacman/R.Png)
-
-## Códigos em Portugol
-Idéia: Juntar tudo em coleções de exemplos de códigos diversos pra ensinar programação
-
-## LULZ ou TROLL
-Idéia: Pequenos programas para trollagem, leve, moderada ou hardcore
-
-
-### Quer me ajudar a terminar algum projeto? mande um pix:
+### Wants to help me to finish a project? you can support me with Pix:
 
 45fff5b3-eb94-49c5-91d5-182e3b020597
 
-### Total em ajuda para os projetos finalizarem:
-Pacman Arco-íris R$ 200
+### Or PayPal:
 
-Coleções de Exemplos R$ 1200
-
-TROLL R$ 500
-
-
-
-Isso ou um notebook bom, pois atualmente programo pelo celular ;)
-
-
-Serviços também são bem-vindos.
+[![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?business=GCFH3VL3RN5YJ&no_recurring=0&item_name=Support&currency_code=BRL)
