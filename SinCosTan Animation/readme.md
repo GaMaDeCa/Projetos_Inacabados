@@ -3,9 +3,7 @@
 - [x] Add Sine
 - [x] Add Cosine
 - [x] Add Tangent
-
-# TODO
-
+- [x] Implement Controls
 - [ ] Add a Hide button(to hide screen objects).
 - [ ] More color customization(Circle color, points colors, background, etc).
 - [ ] Show/Hide custom informations(only show sine, cos, tan informations, etc).
