@@ -1,9 +1,12 @@
 # Random Codes
 
-## Rainbow Pacman
+## Rainbow Pacman(Java Android)
 Main Idea: A customizable pacman(with option to change everything, the scenario, background and game objects colors(player included)), project made in Java Android.
 
 ![I sure didn't know that there was image descriptions...](https://raw.githubusercontent.com/GaMaDeCa/RandomCode/refs/heads/main/Rainbow%20Pacman/R.Png)
+
+## Pie Chart(Java Android)
+Just a Pie Chart.
 
 ## Ada/BF/Cobol/Erlang(Elixir)/Fortran/Go/Haskell/ML/Prolog/Pascal/Portugol/Rust/Scala/Smalltalk/Swift Codes
 Main Idea: Example codes/challenges for learning, just to see the "surface" of each language features.
