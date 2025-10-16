@@ -1,0 +1,123 @@
+<!doctype html>
+<!--Randomized Arms Double Pendulum-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chaos Pendulum</title>
+  <style>
+    html,body { margin:0; padding:0; height:100%; background:#fff; overflow:hidden; }
+    canvas { display:block; width:100%; height:100%; background:#fff; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Parameters
+let L1 = getRandomIntInclusive(50, 110);// length of first arm
+let L2 = getRandomIntInclusive(50, 110); // length of second arm
+let m1 = 10;  // mass 1
+let m2 = 10;  // mass 2
+let g = 1;    // gravity
+
+let a1 = Math.PI/2; // angle 1
+let a2 = Math.PI/2; // angle 2
+let a1_v = 0;       // angular velocity 1
+let a2_v = 0;       // angular velocity 2
+
+// Tracking path
+const pathCanvas = document.createElement('canvas');
+const pathCtx = pathCanvas.getContext('2d');
+function resizePathCanvas() {
+  pathCanvas.width = canvas.width;
+  pathCanvas.height = canvas.height;
+}
+resizePathCanvas();
+
+window.addEventListener('resize', resizePathCanvas);
+
+function update() {
+  // Equations of motion for a double pendulum (simplified)
+  let num1 = -g*(2*m1+m2)*Math.sin(a1);
+  let num2 = -m2*g*Math.sin(a1-2*a2);
+  let num3 = -2*Math.sin(a1-a2)*m2*(a2_v*a2_v*L2 + a1_v*a1_v*L1*Math.cos(a1-a2));
+  let den = L1*(2*m1+m2 - m2*Math.cos(2*a1-2*a2));
+  let a1_a = (num1 + num2 + num3) / den;
+
+  num1 = 2*Math.sin(a1-a2)*(a1_v*a1_v*L1*(m1+m2) + g*(m1+m2)*Math.cos(a1) + a2_v*a2_v*L2*m2*Math.cos(a1-a2));
+  den = L2*(2*m1+m2 - m2*Math.cos(2*a1-2*a2));
+  let a2_a = num1 / den;
+
+  a1_v += a1_a;
+  a2_v += a2_a;
+  a1_v *= 0.999; // damping
+  a2_v *= 0.999;
+  a1 += a1_v;
+  a2 += a2_v;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const originX = canvas.width/2;
+  const originY = canvas.height/4;
+
+  const x1 = originX + L1*Math.sin(a1);
+  const y1 = originY + L1*Math.cos(a1);
+  const x2 = x1 + L2*Math.sin(a2);
+  const y2 = y1 + L2*Math.cos(a2);
+
+  // Draw tracking path (red line)
+  pathCtx.strokeStyle = 'red';
+  pathCtx.lineWidth = 2;
+  pathCtx.lineCap = 'round';
+  pathCtx.beginPath();
+  pathCtx.moveTo(x2, y2);
+  pathCtx.lineTo(x2, y2);
+  pathCtx.stroke();
+
+  // Merge tracking path onto main canvas
+  ctx.drawImage(pathCanvas, 0, 0);
+
+  // Draw pendulum arms (black lines)
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(originX, originY);
+  ctx.lineTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+
+  // Draw points (dark blue)
+  ctx.fillStyle = '#002b8f';
+  ctx.beginPath();
+  ctx.arc(x1, y1, m1/2, 0, 2*Math.PI);
+  ctx.arc(x2, y2, m2/2, 0, 2*Math.PI);
+  ctx.fill();
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+loop();
+
+  </script>
+</body>
+</html>

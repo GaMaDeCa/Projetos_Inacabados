@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Connect Points</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #fff;
+    }
+    canvas {
+      display: block;
+      touch-action: none;
+      background: #fff;
+    }
+    #resetBtn {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #000;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <button id="resetBtn">Reset</button>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let points = [];
+    let dragging = false;
+    let selectedPoint = null;
+    let currentX = 0, currentY = 0;
+
+    const colors = ['red', 'blue', 'green', 'purple', 'orange', 'teal', 'pink', 'brown'];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      createRandomPoints();
+    }
+
+    function createRandomPoints() {
+      points = [];
+      const w = canvas.width;
+      const h = canvas.height;
+      const pairs = Math.min(colors.length, 6); // 6 colors (12 total points)
+      const margin = 60;
+
+      for (let i = 0; i < pairs; i++) {
+        const color = colors[i];
+        const p1 = {
+          x: margin + Math.random() * (w - 2 * margin),
+          y: margin + Math.random() * (h - 2 * margin),
+          color,
+          connectedTo: null
+        };
+        const p2 = {
+          x: margin + Math.random() * (w - 2 * margin),
+          y: margin + Math.random() * (h - 2 * margin),
+          color,
+          connectedTo: null
+        };
+        points.push(p1, p2);
+      }
+    }
+
+    window.addEventListener('load', () => {
+      resize();
+      draw();
+    });
+    window.addEventListener('resize', resize);
+
+    function getTouchPos(evt) {
+      const rect = canvas.getBoundingClientRect();
+      if (evt.touches && evt.touches.length > 0) {
+        return {
+          x: evt.touches[0].clientX - rect.left,
+          y: evt.touches[0].clientY - rect.top
+        };
+      } else if (evt.changedTouches && evt.changedTouches.length > 0) {
+        return {
+          x: evt.changedTouches[0].clientX - rect.left,
+          y: evt.changedTouches[0].clientY - rect.top
+        };
+      } else {
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+      }
+    }
+
+    function startDrag(evt) {
+      const pos = getTouchPos(evt);
+      for (const p of points) {
+        const dx = pos.x - p.x, dy = pos.y - p.y;
+        if (Math.sqrt(dx*dx + dy*dy) < 25) {
+          dragging = true;
+          selectedPoint = p;
+          currentX = pos.x;
+          currentY = pos.y;
+          break;
+        }
+      }
+    }
+
+    function drag(evt) {
+      if (!dragging || !selectedPoint) return;
+      const pos = getTouchPos(evt);
+      currentX = pos.x;
+      currentY = pos.y;
+    }
+
+    function endDrag(evt) {
+      if (!dragging || !selectedPoint) return;
+      const pos = getTouchPos(evt);
+      const endX = pos.x || currentX;
+      const endY = pos.y || currentY;
+
+      for (const p of points) {
+        if (p === selectedPoint) continue;
+        if (p.color === selectedPoint.color) {
+          const dx = endX - p.x, dy = endY - p.y;
+          if (Math.sqrt(dx*dx + dy*dy) < 50) {
+            selectedPoint.connectedTo = p;
+            p.connectedTo = selectedPoint;
+          }
+        }
+      }
+
+      dragging = false;
+      selectedPoint = null;
+    }
+
+    function resetConnections() {
+      for (const p of points) p.connectedTo = null;
+      createRandomPoints();
+    }
+    resetBtn.addEventListener('click', resetConnections);
+
+    // Mouse & touch support
+    canvas.addEventListener('mousedown', startDrag);
+    canvas.addEventListener('mousemove', drag);
+    canvas.addEventListener('mouseup', endDrag);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e); });
+    canvas.addEventListener('touchmove', e => { e.preventDefault(); drag(e); });
+    canvas.addEventListener('touchend', e => { e.preventDefault(); endDrag(e); });
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw connections
+      ctx.lineWidth = 6;
+      for (const p of points) {
+        if (p.connectedTo && points.indexOf(p) < points.indexOf(p.connectedTo)) {
+          ctx.strokeStyle = p.color;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.connectedTo.x, p.connectedTo.y);
+          ctx.stroke();
+        }
+      }
+
+      // Draw dragging line
+      if (dragging && selectedPoint) {
+        ctx.strokeStyle = selectedPoint.color;
+        ctx.beginPath();
+        ctx.moveTo(selectedPoint.x, selectedPoint.y);
+        ctx.lineTo(currentX, currentY);
+        ctx.stroke();
+      }
+
+      // Draw points
+      for (const p of points) {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 18, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#000';
+        ctx.stroke();
+      }
+
+      requestAnimationFrame(draw);
+    }
+  </script>
+</body>
+</html>
