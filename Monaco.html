@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Context: It's a working online code editor front, it may look great and all but it's not versatile in some aspects, still powerfull in it's features, but it eats too much memory too -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Monaco Code Editor</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+    }
+    #controls {
+      background: #1e1e1e;
+      color: white;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    #controls select,
+    #controls input[type="number"],
+    #controls button,
+    #controls label {
+      padding: 5px 10px;
+      font-size: 14px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #controls input[type="number"] {
+      width: 60px;
+    }
+    #controls input[type="file"] {
+      display: none;
+    }
+    #editor {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <label>
+      Language:
+      <select id="language-select">
+        <option value="javascript">JavaScript</option>
+        <option value="typescript">TypeScript</option>
+        <option value="python">Python</option>
+        <option value="html">HTML</option>
+        <option value="css">CSS</option>
+        <option value="json">JSON</option>
+        <option value="markdown">Markdown</option>
+        <option value="cpp">C++</option>
+        <option value="xml">XML</option>
+      </select>
+    </label>
+
+    <label>
+      Theme:
+      <select id="theme-select">
+        <option value="vs-dark">Dark</option>
+        <option value="vs-light">Light</option>
+        <option value="hc-black">High Contrast</option>
+      </select>
+    </label>
+
+    <label>
+      Tab Size:
+      <input type="number" id="tab-size" min="1" max="8" value="2" />
+    </label>
+	<label>
+		<input type="checkbox" id="minimap-toggle" checked />
+		Show Minimap
+	</label>
+
+    <button id="save-btn">💾 Save</button>
+
+    <label for="load-input">📂 Load
+      <input type="file" id="load-input" />
+    </label>
+  </div>
+
+  <div id="editor"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+  <script>
+    let editor;
+
+    const languageExtensions = {
+      javascript: '.js',
+      typescript: '.ts',
+      python: '.py',
+      html: '.html',
+      css: '.css',
+      json: '.json',
+      markdown: '.md',
+      cpp: '.cpp',
+      xml: '.xml'
+    };
+
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+
+    require(['vs/editor/editor.main'], function () {
+      editor = monaco.editor.create(document.getElementById('editor'), {
+        value: `// Start coding...\nfunction greet(name) {\n\tconsole.log("Hello, " + name);\n}\n\ngreet("World");`,
+        language: 'javascript',
+        theme: 'vs-dark',
+        tabSize: 2,
+        automaticLayout: true
+      });
+
+      const languageSelect = document.getElementById('language-select');
+      languageSelect.addEventListener('change', e => {
+        const lang = e.target.value;
+        monaco.editor.setModelLanguage(editor.getModel(), lang);
+      });
+
+      const themeSelect = document.getElementById('theme-select');
+      themeSelect.addEventListener('change', e => {
+        monaco.editor.setTheme(e.target.value);
+      });
+
+      const tabSizeInput = document.getElementById('tab-size');
+      tabSizeInput.addEventListener('change', e => {
+        const tabSize = parseInt(e.target.value, 10);
+        const model = editor.getModel();
+        if (model) model.updateOptions({ tabSize });
+        editor.updateOptions({ tabSize });
+      });
+	  
+	  const minimapToggle = document.getElementById('minimap-toggle');
+	  minimapToggle.addEventListener('change', (e) => {
+		editor.updateOptions({ minimap: { enabled: e.target.checked } });
+	  });
+
+
+      document.getElementById('save-btn').addEventListener('click', async () => {
+        const code = editor.getValue();
+        const lang = languageSelect.value;
+        const ext = languageExtensions[lang] || '.txt';
+        let filename = 'myproject';
+
+        if ('showSaveFilePicker' in window) {
+          try {
+            const opts = {
+              suggestedName: filename + ext,
+              types: [{
+                description: `${lang.toUpperCase()} file`,
+                accept: { 'text/plain': [ext] }
+              }]
+            };
+            const handle = await window.showSaveFilePicker(opts);
+            const writable = await handle.createWritable();
+            await writable.write(code);
+            await writable.close();
+            alert('File saved successfully!');
+          } catch (err) {
+            if (err.name !== 'AbortError') {
+              alert('Error saving file: ' + err.message);
+            }
+          }
+        } else {
+          // fallback for unsupported browsers
+          const blob = new Blob([code], { type: 'text/plain' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = filename + ext;
+          a.click();
+        }
+      });
+
+      document.getElementById('load-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          editor.setValue(e.target.result);
+        };
+        reader.readAsText(file);
+      });
+    });
+  </script>
+</body>
+</html>

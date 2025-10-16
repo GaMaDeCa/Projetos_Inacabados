@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Python Runner (Brython)</title>
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/brython@3.11.0/brython_stdlib.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #0f0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #example-selector {
+      width: 100%;
+      padding: 10px;
+      background-color: #111;
+      color: #0f0;
+      border: none;
+      font-size: 16px;
+    }
+
+    #code-area {
+      flex: 0 0 auto;
+      padding: 10px;
+    }
+
+    #code-input {
+      width: 100%;
+      height: 200px;
+      background-color: #111;
+      color: #0f0;
+      border: none;
+      font-size: 16px;
+      resize: vertical;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    #buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px;
+      justify-content: center;
+    }
+
+    #buttons button {
+      background-color: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    #buttons button:hover {
+      background-color: #0f0;
+      color: #000;
+    }
+
+    #output {
+      flex: 1 1 auto;
+      background-color: #000;
+      color: #0f0;
+      padding: 10px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      border-top: 1px solid #0f0;
+    }
+  </style>
+</head>
+<body onload="brython()">
+
+  <select id="example-selector">
+    <option value="">-- Load example code --</option>
+    <option value="hello">Hello World</option>
+    <option value="loop">Loop Example</option>
+    <option value="function">Function Example</option>
+    <option value="error">Error Example</option>
+    <option value="input">If Statement</option>
+  </select>
+
+  <div id="code-area">
+    <textarea id="code-input" placeholder="# Write Python code here..."></textarea>
+  </div>
+
+  <div id="buttons">
+    <button id="run-btn">Run</button>
+    <button id="reset-btn">Reset Environment</button>
+  </div>
+
+  <div id="output"></div>
+
+  <script type="text/python">
+    from browser import document, window
+    import sys
+    import io
+    import traceback
+
+    code_input = document["code-input"]
+    output = document["output"]
+    run_button = document["run-btn"]
+    reset_button = document["reset-btn"]
+    example_selector = document["example-selector"]
+
+    LOCAL_STORAGE_KEY = "brython_user_code"
+
+    # Example code options
+    examples = {
+        "hello": "print(\"Hello from Brython!\")",
+        "loop": "for i in range(5):\n    print(\"i =\", i)",
+        "function": "def greet(name):\n    print(\"Hello,\", name)\n\ngreet(\"Python\")",
+        "error": "print(unknown_variable)",  # Intentional error
+        "input": "x = 10\nif x > 5:\n    print(\"x is greater than 5\")"
+    }
+
+    # Shared globals dictionary for execution environment
+    global_env = {}
+
+    def append_output(text):
+        output.textContent += text + "\n"
+        output.scrollTop = output.scrollHeight
+
+    def clear_output():
+        output.textContent = ""
+
+    def save_code_to_local_storage():
+        window.localStorage.setItem(LOCAL_STORAGE_KEY, code_input.value)
+
+    def load_code_from_local_storage():
+        saved = window.localStorage.getItem(LOCAL_STORAGE_KEY)
+        if saved is not None:
+            code_input.value = saved
+
+    def run_code(event):
+        clear_output()
+        sys.stdout = io.StringIO()
+        sys.stderr = sys.stdout  # Capture errors
+
+        try:
+            code = code_input.value
+            exec(code, global_env)
+        except Exception:
+            traceback.print_exc()
+
+        result = sys.stdout.getvalue()
+        output.textContent = result
+
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+        save_code_to_local_storage()
+
+    def load_example(ev):
+        key = example_selector.value
+        if key in examples:
+            code_input.value = examples[key]
+            save_code_to_local_storage()
+
+    def reset_environment(ev):
+        global global_env
+        global_env = {}  # Reset the execution environment
+        append_output("--- Environment reset ---")
+
+    run_button.bind("click", run_code)
+    reset_button.bind("click", reset_environment)
+    example_selector.bind("change", load_example)
+
+    load_code_from_local_storage()
+  </script>
+</body>
+</html>
